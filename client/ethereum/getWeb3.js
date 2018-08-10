@@ -16,9 +16,9 @@ const resolveWeb3 = (resolve) => {
 
   console.log("------ resolveWeb3 ----");
   console.log(web3);
-
   
-  resolve(web3)
+  resolve(web3)  
+
 }
 
 export default () =>

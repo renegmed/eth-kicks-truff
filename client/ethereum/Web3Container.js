@@ -9,10 +9,13 @@ export default class Web3Container extends React.Component {
   async componentDidMount () {
     try {
       const web3 = await getWeb3()
-      //const accounts = await web3.eth.getAccounts()
+      console.log("------- Web3Container componentDidMount() web3 ----------");
+      console.log(web3);
+
+      const accounts = await web3.eth.getAccounts()
       
-      //console.log(`---- Web3Container componentDidMount() accounts from web3.eth.getAccounts() ----`);
-      //console.log(accounts);
+      console.log(`---- Web3Container componentDidMount() accounts from web3.eth.getAccounts() ----`);
+      console.log(accounts);
 
       const campaignFactory = await getFactory(web3, campaignFactoryDefinition)
       this.setState({ web3, campaignFactory })
@@ -25,7 +28,7 @@ export default class Web3Container extends React.Component {
     }
   }
 
-  render () {
+  render () {     
     const { web3, campaignFactory } = this.state
     return web3 && campaignFactory
       ? this.props.render({ web3, campaignFactory })

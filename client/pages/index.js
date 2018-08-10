@@ -6,21 +6,36 @@ import Web3Container from '../ethereum/Web3Container';
 
 
 class CampaignIndex extends Component {
-  state = {campaigns: null};
+  state = {campaigns: null, web3: null};
  
+  // this method is NextJS specific????NOT WORKING . It doesn't use componentDidMount
+  // static async getInitialProps() {
+  //   const { web3, campaignFactory } = this.props
+  //   console.log("======  CampaignIndex getInitialProps() web3 ========");
+  //   console.log(web3);
+
+  //   const campaigns = await campaignFactory.methods.getDeployedCampaigns().call();
+  //   console.log("======  getInitialProps() campaigns ========");
+  //   console.log(campaigns);
+
+  //   return { web3, campaignFactory, campaigns };
+  // }  
+
   async componentDidMount () {
     const { web3, campaignFactory } = this.props
-     
+    console.log("======  CampaignIndex componentDidMount() web3 ========");
+    console.log(web3);
+
     const campaigns = await campaignFactory.methods.getDeployedCampaigns().call();
     console.log("======  componentDidMount() campaigns ========");
     console.log(campaigns);
 
-    this.setState({ campaigns });
+    this.setState({ web3, campaigns });
  
   }
   
   renderCampaigns() {
-    const campaigns = this.state.campaigns;
+    const {campaigns} = this.state;
     console.log("===== campaigns =======");
     console.log(campaigns); 
     
@@ -30,7 +45,7 @@ class CampaignIndex extends Component {
         return {
           header: address,
           description: (
-            <Link >
+            <Link route={`/campaigns/${address}`}>
               <a>View Campaign</a>
             </Link>
           ),
@@ -45,15 +60,25 @@ class CampaignIndex extends Component {
     return (
       <Layout>
         <div>
-          <h3>Open Campaigns</h3>  
+          <h3>Open Campaigns</h3> 
+          
+          <Link route="/campaigns/new" >
+            <a>
+              <Button
+                floated="right"
+                content="Create Campaign"
+                icon="add circle"
+                primary               
+              />
+            </a>
+          </Link>
+
           {this.renderCampaigns()}
         </div>
       </Layout>
     );
   }
 }
-
-//export default CampaignIndex;
 
 export default () => (
   <Web3Container

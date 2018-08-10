@@ -1,25 +1,43 @@
 import React, { Component } from 'react';
 import { Form, Button, Input, Message } from 'semantic-ui-react';
 import Layout from '../../components/Layout';
-import factory from '../../ethereum/factory';
-import web3 from '../../ethereum/web3';
 import { Router } from '../../routes';
+import getWeb3 from '../../ethereum/getWeb3';
+import getFactory from '../../ethereum/getFactory'
+import campaignFactoryDefinition from '../../lib/contracts/CampaignFactory.json'
 
 class CampaignNew extends Component {
   state = {
     minimumContribution: '',
     errorMessage: '',
-    loading: false
+    loading: false,
+    web3: this.props.web3
   };
-
+  
+  async componentDidMount () {
+    const {web3} = this.props
+    console.log("======  CampaignNew componentDidMount() web3 ========");
+    console.log(web3);
+ 
+    this.setState({ web3 });
+ 
+  }
   onSubmit = async event => {
     event.preventDefault();
 
     this.setState({ loading: true, errorMessage: '' });
 
     try {
+      
+      const web3 = await getWeb3()     
+      console.log("------ CampaignNew onSubmit web3 ----------");
+      console.log(web3);
+
       const accounts = await web3.eth.getAccounts();
-      await factory.methods
+
+      const campaignFactory = await getFactory(web3, campaignFactoryDefinition)
+
+      await campaignFactory.methods
         .createCampaign(this.state.minimumContribution)
         .send({
           from: accounts[0]
