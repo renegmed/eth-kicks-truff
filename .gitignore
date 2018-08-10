@@ -1,0 +1,4 @@
+client/node_modules
+client/.next
+client/package-lock.json
+client/yarn.lock 

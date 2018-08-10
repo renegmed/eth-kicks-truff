@@ -1,0 +1,9 @@
+
+to run the test
+    1. start Ganache
+    2. migrate solidity files (see truffle.js)
+        $> truffle migrate --compile-all --reset --network ganache
+    3. run test (refer to migrations/2_deploy_contracts.js)
+        $> truffle test --network ganache
+
+
