@@ -23,12 +23,12 @@ class CampaignIndex extends Component {
 
   async componentDidMount () {
     const { web3, campaignFactory } = this.props
-    console.log("======  CampaignIndex componentDidMount() web3 ========");
-    console.log(web3);
+    // console.log("======  CampaignIndex componentDidMount() web3 ========");
+    // console.log(web3);
 
     const campaigns = await campaignFactory.methods.getDeployedCampaigns().call();
-    console.log("======  componentDidMount() campaigns ========");
-    console.log(campaigns);
+    // console.log("======  componentDidMount() campaigns ========");
+    // console.log(campaigns);
 
     this.setState({ web3, campaigns });
  
@@ -36,8 +36,8 @@ class CampaignIndex extends Component {
   
   renderCampaigns() {
     const {campaigns} = this.state;
-    console.log("===== campaigns =======");
-    console.log(campaigns); 
+    // console.log("===== campaigns =======");
+    // console.log(campaigns); 
     
     let items;
     if (campaigns) {
