@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
 import { Form, Input, Message, Button } from 'semantic-ui-react';
-//import Campaign from '../ethereum/campaign';
-//import web3 from '../ethereum/web3';
 import { Router } from '../routes';
+import getWeb3 from '../ethereum/getWeb3';
+import campaignDefinition from '../lib/contracts/Campaign.json'
 
 class ContributeForm extends Component {
   state = {
@@ -14,23 +14,39 @@ class ContributeForm extends Component {
   onSubmit = async event => {
     event.preventDefault();
 
-    // const campaign = Campaign(this.props.address);
+    const {address} = this.props;
+    console.log("******* ContributeForm onSubmit() address ***********");
+    console.log(address);
+     
+    const web3 = await getWeb3()     
+    console.log("******* ContributeForm onSubmit()  web3  ***********");
+    console.log(web3);
+      
+    const campaign = new web3.eth.Contract(
+      campaignDefinition.abi,
+      address
+    )
+    console.log("******* ContributeForm onSubmit()  campaign  ***********");
+    console.log(campaign);
 
-    // this.setState({ loading: true, errorMessage: '' });
+    this.setState({ loading: true, errorMessage: '' });
 
-    // try {
-    //   const accounts = await web3.eth.getAccounts();
-    //   await campaign.methods.contribute().send({
-    //     from: accounts[0],
-    //     value: web3.utils.toWei(this.state.value, 'ether')
-    //   });
+    try {
+      const accounts = await web3.eth.getAccounts();
+      console.log("******* ContributeForm onSubmit()  accounts  ***********");
+      console.log(accounts);
 
-    //   Router.replaceRoute(`/campaigns/${this.props.address}`);
-    // } catch (err) {
-    //   this.setState({ errorMessage: err.message });
-    // }
+      await campaign.methods.contribute().send({
+        from: accounts[0],
+        value: web3.utils.toWei(this.state.value, 'ether')
+      });
 
-    // this.setState({ loading: false, value: '' });
+      Router.replaceRoute(`/campaigns/${this.props.address}`);
+    } catch (err) {
+      this.setState({ errorMessage: err.message });
+    }
+
+    this.setState({ loading: false, value: '' });
   };
 
   render() {
